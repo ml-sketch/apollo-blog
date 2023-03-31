@@ -1,7 +1,7 @@
-import { gql } from '@apollo/client';
+import { gql } from "@apollo/client";
 
 const GET_ALL_SLUGS = gql`
-query {
+  query {
     blogPosts {
       data {
         attributes {
@@ -13,13 +13,17 @@ query {
 `;
 
 const GET_ALL_POSTS = gql`
-query {
-    blogPosts {
+  query GetAllPosts($limit: Int, $start: Int) {
+    events(
+      pagination: { limit: $limit, start: $start }
+      sort: "publishedAt:desc"
+    ) {
       data {
         attributes {
           title
           description
-          urlSlug
+          slug
+          publishedAt
         }
       }
     }
@@ -27,7 +31,7 @@ query {
 `;
 
 const GET_INDIVIDUAL_POST = gql`
-query ($slugUrl: String!) {
+  query ($slugUrl: String!) {
     blogPosts(filters: { urlSlug: { eq: $slugUrl } }) {
       data {
         attributes {
